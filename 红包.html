@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>🧧 收到一笔除夕转账</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #d92e2e;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden; /* 禁止滚动 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #fceea7;
+        }
+
+        .container {
+            text-align: center;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            width: 90%;
+            max-width: 400px;
+            position: relative;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .money {
+            font-size: 50px;
+            font-weight: bold;
+            color: #fff;
+            margin: 20px 0;
+            text-shadow: 2px 2px 0px #b31616;
+        }
+
+        .desc {
+            font-size: 16px;
+            margin-bottom: 40px;
+            color: #ffcccc;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border-radius: 50px;
+            border: none;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: block;
+            width: 80%;
+            margin: 10px auto;
+            position: relative; /*以此为基准 */
+        }
+
+        .btn-accept {
+            background-color: #fceea7;
+            color: #d92e2e;
+            box-shadow: 0 5px 0 #c7b35e;
+            z-index: 100;
+        }
+
+        .btn-reject {
+            background-color: transparent;
+            border: 2px solid #fceea7;
+            color: #fceea7;
+            font-size: 14px;
+            margin-top: 20px;
+        }
+
+        /* 搞怪马的样式 */
+        #horse-surprise {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #d92e2e;
+            z-index: 999;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .horse-emoji {
+            font-size: 100px;
+            animation: spin 1s infinite linear;
+        }
+
+        .troll-text {
+            font-size: 22px;
+            margin: 20px;
+            line-height: 1.5;
+            color: #fff;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.5); }
+            100% { transform: rotate(360deg) scale(1); }
+        }
+
+        /* 烟花效果简易版 */
+        .firework {
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            box-shadow: 0 0 10px 2px #fff;
+            animation: pop 1s ease-out infinite;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container" id="main-box">
+        <div style="font-size: 60px;">🐴</div>
+        <h1>马年除夕 · 巨款到账</h1>
+        <div class="desc">鉴于咱俩的塑料友谊，特批巨款</div>
+        <div class="money">¥ 8,888.00</div>
+        
+        <!-- 这个按钮会跑 -->
+        <button class="btn btn-accept" id="btn-run">含泪收下</button>
+        
+        <!-- 这个按钮是陷阱 -->
+        <button class="btn btn-reject" onclick="admitDefeat()">我是小猪，我不要</button>
+    </div>
+
+    <!-- 隐藏的搞怪层 -->
+    <div id="horse-surprise">
+        <div class="horse-emoji">🐎</div>
+        <div class="troll-text">
+            哈哈哈哈哈哈！<br>
+            就知道你点不到！<br><br>
+            <span style="color: #fceea7; font-size: 26px; font-weight: bold;">祝你马年除夕快乐！</span><br>
+            <br>
+            愿你在新的一年里：<br>
+            吃得像马一样多<br>
+            跑得像马一样快<br>
+            <b>但是千万别长一张马脸！</b>
+            <br><br>
+            (点击屏幕任意处关闭，假装无事发生)
+        </div>
+    </div>
+
+    <script>
+        const btnRun = document.getElementById('btn-run');
+        const mainBox = document.getElementById('main-box');
+        
+        // 让按钮跑路的逻辑
+        function moveButton() {
+            // 获取可视窗口大小
+            const maxWidth = window.innerWidth - btnRun.offsetWidth;
+            const maxHeight = window.innerHeight - btnRun.offsetHeight;
+            
+            // 随机坐标
+            const randomX = Math.floor(Math.random() * maxWidth);
+            const randomY = Math.floor(Math.random() * maxHeight);
+            
+            // 设置按钮为绝对定位并移动
+            btnRun.style.position = 'fixed';
+            btnRun.style.left = randomX + 'px';
+            btnRun.style.top = randomY + 'px';
+            
+            // 每次跑路稍微变小一点，增加嘲讽感
+            let currentScale = btnRun.style.transform.replace(/[^0-9.]/g, '') || 1;
+            if(currentScale > 0.5) {
+                btnRun.style.transform = `scale(${currentScale * 0.9})`;
+            }
+            
+            // 更改文字嘲讽
+            const taunts = ["点不到", "略略略", "手太慢", "马不停蹄", "再来啊", "放弃吧"];
+            btnRun.innerText = taunts[Math.floor(Math.random() * taunts.length)];
+        }
+
+        // 电脑端鼠标移入
+        btnRun.addEventListener('mouseover', moveButton);
+        
+        // 手机端点击（touchstart会比click反应更快）
+        btnRun.addEventListener('touchstart', (e) => {
+            e.preventDefault(); // 防止触发点击
+            moveButton();
+        });
+        
+        // 以防万一有人真点到了
+        btnRun.addEventListener('click', (e) => {
+            e.preventDefault();
+            moveButton();
+        });
+
+        // 认输后的逻辑
+        function admitDefeat() {
+            document.getElementById('horse-surprise').style.display = 'flex';
+            // 播放一个音效（可选，浏览器可能拦截）
+            try {
+                // 这里没有加实际音频文件，纯视觉整蛊
+            } catch(e){}
+        }
+
+        // 点击搞怪层关闭
+        document.getElementById('horse-surprise').addEventListener('click', () => {
+             document.getElementById('horse-surprise').style.display = 'none';
+             // 恢复按钮位置
+             btnRun.style.position = 'static';
+             btnRun.style.transform = 'scale(1)';
+             btnRun.innerText = '含泪收下';
+             alert("行了，别玩了，真的祝你除夕快乐！🧧");
+        });
+
+    </script>
+</body>
+</html>
